@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Asesmen Sumatif Akhir Semester (SAS) - SMAS Al-Hilaal Tehoru</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#1e3a8a',
+                            darknavy: '#0f172a',
+                            gold: '#d97706',
+                            goldlight: '#f59e0b',
+                            goldhover: '#b45309',
+                            cream: '#fef3c7',
+                            softblue: '#eff6ff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            user-select: none; /* Mencegah copas saat ujian */
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Print Stylesheet for Report PDF */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-area, #printable-area * {
+                visibility: visible;
+            }
+            #printable-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER GLOBAL -->
+    <header class="bg-brand-navy text-white shadow-md border-b-4 border-brand-gold sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-brand-gold rounded-full flex items-center justify-center text-brand-navy font-bold text-xl shadow-inner">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-sm md:text-lg tracking-wide uppercase">SMAS AL-HILAAL TEHORU</h1>
+                    <p class="text-xs text-amber-200">Sistem Asesmen Sumatif Akhir Semester (SAS) Online</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span id="role-badge" class="hidden md:inline-block bg-blue-900 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/40 font-medium">
+                    <i class="fa-solid fa-book-bookmark mr-1"></i> Bahasa Indonesia - Kelas X
+                </span>
+                <button id="btn-admin-access" onclick="openAdminModal()" class="bg-amber-600 hover:bg-brand-goldhover text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition duration-150 flex items-center shadow">
+                    <i class="fa-solid fa-user-gear mr-1.5"></i> <span id="admin-btn-text">Portal Guru</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-3 sm:p-4 md:p-6">
+
+        <!-- 1. HALAMAN BERANDA -->
+        <section id="page-home" class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-brand-navy via-blue-900 to-slate-900 p-6 md:p-10 text-white relative">
+                    <div class="absolute right-4 bottom-0 opacity-10 text-8xl font-black text-amber-400 pointer-events-none">
+                        LHO
+                    </div>
+                    <div class="relative z-10 max-w-3xl">
+                        <span class="bg-amber-500/20 text-amber-300 text-xs font-semibold px-3 py-1 rounded-full border border-amber-400/30 uppercase tracking-wider">
+                            Tahun Ajaran 2024/2025
+                        </span>
+                        <h2 class="text-2xl md:text-4xl font-extrabold mt-3 mb-2 text-white leading-tight">
+                            ASESMEN SUMATIF AKHIR SEMESTER (SAS)
+                        </h2>
+                        <p class="text-base md:text-xl font-medium text-amber-200 mb-4">
+                            Mata Pelajaran: Bahasa Indonesia (Fase E / Kelas X)
+                        </p>
+                        <div class="flex flex-wrap gap-4 text-xs md:text-sm text-slate-200 pt-2 border-t border-white/10">
+                            <div class="flex items-center"><i class="fa-solid fa-folder-open text-amber-400 mr-2"></i> Materi: Teks Laporan Hasil Observasi</div>
+                            <div class="flex items-center"><i class="fa-solid fa-user-tie text-amber-400 mr-2"></i> Pengampu: Rosdiana Waifitu, S.Pd.</div>
+                            <div class="flex items-center"><i class="fa-solid fa-clock text-amber-400 mr-2"></i> Durasi: <span id="display-home-duration">90</span> Menit</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 bg-slate-50">
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4">
+                            <div class="p-3 bg-blue-100 text-brand-navy rounded-lg"><i class="fa-solid fa-list-check text-xl"></i></div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm">Jumlah Soal</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">40 Soal Pilihan Ganda (A-E)</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4">
+                            <div class="p-3 bg-amber-100 text-brand-gold rounded-lg"><i class="fa-solid fa-bullseye text-xl"></i></div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm">Standar KKTP / KKM</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Nilai Ketuntasan Minimum: <span id="display-home-kkm">75</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4">
+                            <div class="p-3 bg-emerald-100 text-emerald-700 rounded-lg"><i class="fa-solid fa-shield-halved text-xl"></i></div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm">Sistem CBT Modern</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Auto-Save & Navigasi Soal Ragu</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-2">
+                        <button onclick="navigateTo('page-identity')" class="w-full sm:w-auto px-8 py-3.5 bg-brand-gold hover:bg-brand-goldhover text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <span>MULAI ASESMEN SISWA</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. HALAMAN IDENTITAS PESERTA -->
+        <section id="page-identity" class="hidden max-w-2xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-8">
+                <div class="border-b pb-4 mb-6 text-center">
+                    <div class="w-12 h-12 bg-blue-100 text-brand-navy rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-brand-navy">Identitas Peserta Didik</h2>
+                    <p class="text-xs text-slate-500 mt-1">Lengkapi data diri secara benar sebelum memulai ujian SAS Bahasa Indonesia</p>
+                </div>
+
+                <form id="form-identity" onsubmit="submitIdentity(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Lengkap Siswa <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" id="input-nama" required placeholder="Contoh: Ahmad Abdullah" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy focus:border-brand-navy outline-none text-sm font-medium">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Rombongan Belajar (Kelas) <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-users"></i></span>
+                                <select id="input-kelas" required class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy focus:border-brand-navy outline-none text-sm font-medium bg-white">
+                                    <option value="">-- Pilih Kelas --</option>
+                                    <option value="X-1">X-1 (Fase E)</option>
+                                    <option value="X-2">X-2 (Fase E)</option>
+                                    <option value="X-3">X-3 (Fase E)</option>
+                                    <option value="X-4">X-4 (Fase E)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nomor Absen <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-list-ol"></i></span>
+                                <input type="number" min="1" max="50" id="input-absen" required placeholder="Contoh: 15" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy focus:border-brand-navy outline-none text-sm font-medium">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nomor Peserta Ujian <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-hashtag"></i></span>
+                            <input type="text" id="input-nopes" required placeholder="Contoh: SAS-X-012" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy focus:border-brand-navy outline-none text-sm font-medium">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex items-center justify-between">
+                        <button type="button" onclick="navigateTo('page-home')" class="px-4 py-2 text-slate-600 hover:text-slate-800 text-sm font-semibold">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                        </button>
+                        <button type="submit" class="px-6 py-2.5 bg-brand-navy hover:bg-blue-900 text-white font-bold rounded-lg shadow-md transition-all text-sm flex items-center space-x-2">
+                            <span>Lanjut ke Petunjuk</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- 3. HALAMAN PETUNJUK UJIAN -->
+        <section id="page-instructions" class="hidden max-w-3xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-8">
+                <div class="flex items-center space-x-3 border-b pb-4 mb-6">
+                    <div class="w-10 h-10 bg-amber-100 text-brand-gold rounded-lg flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-brand-navy">Petunjuk & Tata Tertib Ujian</h2>
+                        <p class="text-xs text-slate-500">SMAS Al-Hilaal Tehoru • Bahasa Indonesia Kelas X</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-8 text-sm text-slate-700">
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
+                        <div class="font-bold text-brand-navy flex items-center">
+                            <i class="fa-solid fa-user-check mr-2"></i> Data Peserta Terverifikasi:
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-slate-600 pl-6">
+                            <div>Nama: <strong id="summary-nama" class="text-slate-800">-</strong></div>
+                            <div>Kelas: <strong id="summary-kelas" class="text-slate-800">-</strong></div>
+                            <div>No. Absen: <strong id="summary-absen" class="text-slate-800">-</strong></div>
+                            <div>No. Ujian: <strong id="summary-nopes" class="text-slate-800">-</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pl-2">
+                        <div class="flex items-start space-x-3">
+                            <span class="w-6 h-6 bg-slate-100 text-brand-navy rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">1</span>
+                            <p>Ujian terdiri atas <strong>40 Soal Pilihan Ganda</strong> tentang materi <em>Teks Laporan Hasil Observasi (LHO)</em>.</p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="w-6 h-6 bg-slate-100 text-brand-navy rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">2</span>
+                            <p>Waktu pengerjaan dialokasikan selama <strong><span id="instruction-duration">90</span> Menit</strong>. Timer akan berjalan otomatis saat tombol "Mulai Mengerjakan" diklik.</p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="w-6 h-6 bg-slate-100 text-brand-navy rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">3</span>
+                            <p>Pilihlah salah satu jawaban (A, B, C, D, atau E) yang paling tepat. Jawaban Anda tersimpan otomatis.</p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="w-6 h-6 bg-slate-100 text-brand-navy rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">4</span>
+                            <p>Gunakan tombol <strong>"Ragu-Ragu"</strong> jika belum yakin. Indikator navigasi soal ragu-ragu berwarna kuning.</p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="w-6 h-6 bg-slate-100 text-brand-navy rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">5</span>
+                            <p>Jika waktu habis, sistem akan melakukan <strong>pengumpulan otomatis (auto-submit)</strong> atas seluruh jawaban yang telah dipilih.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center border-t pt-6">
+                    <button onclick="navigateTo('page-identity')" class="px-4 py-2 text-slate-600 hover:text-slate-800 text-sm font-semibold">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Edit Identitas
+                    </button>
+                    <button onclick="startExam()" class="px-8 py-3 bg-brand-gold hover:bg-brand-goldhover text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all text-base flex items-center space-x-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>MULAI MENGERJAKAN</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. HALAMAN SOAL UJIAN (CBT INTERAKTIF) -->
+        <section id="page-exam" class="hidden">
+            <!-- BAR NAVIGASI ATAS SOAL -->
+            <div class="bg-white rounded-xl shadow-md p-4 mb-4 border border-slate-200 flex flex-wrap justify-between items-center gap-3">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-brand-navy text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-lg flex items-center">
+                        <i class="fa-solid fa-file-pen mr-2 text-amber-400"></i> SOAL NO. <span id="current-question-num" class="ml-1 text-amber-300 text-base">1</span> / 40
+                    </span>
+                    <span id="badge-ragu-status" class="hidden bg-amber-100 text-amber-800 border border-amber-300 text-xs font-semibold px-2.5 py-1 rounded-md">
+                        <i class="fa-solid fa-bookmark mr-1 text-amber-600"></i> Ditandai Ragu
+                    </span>
+                </div>
+                
+                <!-- TIMER -->
+                <div class="bg-slate-900 text-white px-4 py-1.5 rounded-lg flex items-center space-x-2 shadow-inner border border-slate-700">
+                    <i class="fa-regular fa-clock text-amber-400 animate-pulse"></i>
+                    <span class="text-xs text-slate-300 font-medium">Sisa Waktu:</span>
+                    <span id="exam-timer" class="font-mono text-base md:text-lg font-bold text-amber-300">01:30:00</span>
+                </div>
+
+                <button onclick="toggleNavGridModal()" class="md:hidden bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-lg border font-semibold flex items-center">
+                    <i class="fa-solid fa-grip mr-1"></i> Grid Soal
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- PANEL UTAMA KONTEN SOAL (3 KOOM LARGESCREEN) -->
+                <div class="lg:col-span-3 space-y-4">
+                    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-5 md:p-8 min-h-[420px] flex flex-col justify-between">
+                        <div>
+                            <!-- STIMULUS / TEKS KUTIPAN -->
+                            <div id="question-stimulus" class="mb-4 p-4 bg-slate-50 border-l-4 border-brand-navy text-xs md:text-sm text-slate-700 rounded-r-lg leading-relaxed whitespace-pre-line font-serif italic shadow-inner">
+                                <!-- Dynamic Stimulus Text -->
+                            </div>
+
+                            <!-- PERTANYAAN -->
+                            <h3 id="question-text" class="text-sm md:text-base font-semibold text-slate-900 mb-6 leading-relaxed">
+                                <!-- Dynamic Question Text -->
+                            </h3>
+
+                            <!-- PILIHAN JAWABAN (A-E) -->
+                            <div id="options-container" class="space-y-3">
+                                <!-- Dynamic Options Buttons -->
+                            </div>
+                        </div>
+
+                        <!-- BAR TOMBOL NAVIGASI BOTTOM -->
+                        <div class="flex flex-wrap items-center justify-between gap-3 pt-6 border-t mt-6">
+                            <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs md:text-sm rounded-lg border border-slate-300 transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                <span>Sebelumnya</span>
+                            </button>
+
+                            <button id="btn-ragu" onclick="toggleRaguCurrent()" class="px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-300 font-bold text-xs md:text-sm rounded-lg transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-bookmark"></i>
+                                <span>Ragu - Ragu</span>
+                            </button>
+
+                            <button id="btn-next" onclick="nextQuestion()" class="px-4 py-2 bg-brand-navy hover:bg-blue-900 text-white font-bold text-xs md:text-sm rounded-lg transition flex items-center space-x-1.5">
+                                <span>Berikutnya</span>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+
+                            <button id="btn-finish" onclick="confirmSubmitExam()" class="hidden px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs md:text-sm rounded-lg shadow-md transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>Selesai & Kumpulkan</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL NAVIGASI SOAL DESKTOP (1 KOLOM) -->
+                <div class="hidden lg:block lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-5 sticky top-20">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center justify-between border-b pb-2">
+                            <span><i class="fa-solid fa-grip text-brand-gold mr-1.5"></i> Navigasi Soal</span>
+                            <span class="text-xs font-normal text-slate-500"><span id="answered-count">0</span>/40 Terjawab</span>
+                        </h4>
+
+                        <!-- LEGEND BADGE -->
+                        <div class="grid grid-cols-3 gap-1.5 text-[10px] mb-4 text-center">
+                            <div class="p-1 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded font-semibold">Sudah</div>
+                            <div class="p-1 bg-amber-100 text-amber-800 border border-amber-300 rounded font-semibold">Ragu</div>
+                            <div class="p-1 bg-slate-100 text-slate-600 border border-slate-300 rounded font-semibold">Belum</div>
+                        </div>
+
+                        <!-- GRID 40 TOMBOL SOAL -->
+                        <div id="desktop-grid-nav" class="grid grid-cols-5 gap-2 max-h-[360px] overflow-y-auto custom-scrollbar p-1">
+                            <!-- Dynamic 40 Nav Buttons -->
+                        </div>
+
+                        <div class="mt-5 border-t pt-4">
+                            <button onclick="confirmSubmitExam()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center space-x-1.5">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Kumpulkan Jawaban</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. HALAMAN HASIL UJIAN SISWA -->
+        <section id="page-result" class="hidden max-w-3xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <!-- RESULT HEADER -->
+                <div id="result-banner" class="p-6 md:p-8 text-center text-white bg-gradient-to-r from-brand-navy to-slate-900 relative">
+                    <div class="w-20 h-20 bg-white/10 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-3 border border-white/20">
+                        <i id="result-icon" class="fa-solid fa-trophy text-4xl text-amber-400"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold mb-1">Hasil Asesmen SAS</h2>
+                    <p class="text-xs md:text-sm text-slate-300">Bahasa Indonesia Kelas X Fase E • SMAS Al-Hilaal Tehoru</p>
+                </div>
+
+                <div class="p-6 md:p-8 space-y-6">
+                    <!-- DATA IDENTITAS -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                        <div>
+                            <span class="text-slate-500 block">Nama Siswa:</span>
+                            <strong id="result-nama" class="text-slate-800 text-sm font-bold">--</strong>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">Kelas:</span>
+                            <strong id="result-kelas" class="text-slate-800 text-sm font-bold">--</strong>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">No. Ujian:</span>
+                            <strong id="result-nopes" class="text-slate-800 text-sm font-bold">--</strong>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">Waktu Selesai:</span>
+                            <strong id="result-time" class="text-slate-800 text-sm font-bold">--</strong>
+                        </div>
+                    </div>
+
+                    <!-- SCORE BOX -->
+                    <div class="text-center py-4 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl shadow-sm">
+                        <span class="text-xs font-bold text-amber-800 uppercase tracking-widest">NILAI AKHIR AKUMULASI</span>
+                        <div id="result-score" class="text-5xl md:text-6xl font-black text-brand-navy my-2">0</div>
+                        <div id="result-status-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                            Memuat Status...
+                        </div>
+                    </div>
+
+                    <!-- STATISTIK JAWABAN -->
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                            <i class="fa-solid fa-circle-check text-emerald-600 text-lg mb-1"></i>
+                            <div class="text-xs text-slate-500">Jawaban Benar</div>
+                            <div id="result-benar" class="text-lg font-bold text-emerald-700">0</div>
+                        </div>
+                        <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                            <i class="fa-solid fa-circle-xmark text-rose-600 text-lg mb-1"></i>
+                            <div class="text-xs text-slate-500">Jawaban Salah</div>
+                            <div id="result-salah" class="text-lg font-bold text-rose-700">0</div>
+                        </div>
+                        <div class="p-3 bg-slate-100 border border-slate-300 rounded-xl">
+                            <i class="fa-solid fa-circle-minus text-slate-500 text-lg mb-1"></i>
+                            <div class="text-xs text-slate-500">Tidak Dijawab</div>
+                            <div id="result-kosong" class="text-lg font-bold text-slate-700">0</div>
+                        </div>
+                    </div>
+
+                    <div class="text-center p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600">
+                        <p class="font-semibold text-slate-800 mb-1">Terima Kasih Telah Mengikuti Asesmen!</p>
+                        <p>Data nilai Anda telah tersimpan secara otomatis dalam database asesmen guru (Rosdiana Waifitu, S.Pd.).</p>
+                    </div>
+
+                    <div class="flex justify-center pt-2">
+                        <button onclick="finishExamToHome()" class="px-8 py-3 bg-brand-navy hover:bg-blue-900 text-white font-bold rounded-xl shadow-md transition text-sm flex items-center space-x-2">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Kembali ke Halaman Utama</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. DASHBOARD ADMIN / GURU -->
+        <section id="page-admin" class="hidden space-y-6">
+            <!-- DASHBOARD HEADER -->
+            <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-200 flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-300">
+                        <i class="fa-solid fa-user-shield mr-1"></i> Panel Pengelola Asesmen Guru
+                    </span>
+                    <h2 class="text-2xl font-bold text-brand-navy mt-1">Dashboard Guru & Rekapitulasi SAS</h2>
+                    <p class="text-xs text-slate-500">Guru Pengampu: Rosdiana Waifitu, S.Pd. • SMAS Al-Hilaal Tehoru</p>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="logoutAdmin()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg transition shadow">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar Portal
+                    </button>
+                </div>
+            </div>
+
+            <!-- STATISTIK RINGKAS GURU -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-medium text-slate-500">Total Peserta Ujian</div>
+                    <div id="stat-total-peserta" class="text-2xl font-black text-brand-navy mt-1">0</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-medium text-slate-500">Rata-Rata Nilai</div>
+                    <div id="stat-rata-nilai" class="text-2xl font-black text-blue-600 mt-1">0.0</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-medium text-slate-500">Nilai Tertinggi</div>
+                    <div id="stat-nilai-max" class="text-2xl font-black text-emerald-600 mt-1">0</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-medium text-slate-500">Nilai Terendah</div>
+                    <div id="stat-nilai-min" class="text-2xl font-black text-rose-600 mt-1">0</div>
+                </div>
+            </div>
+
+            <!-- TAB MENU ADMIN -->
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <div class="flex border-b bg-slate-50 overflow-x-auto">
+                    <button id="tab-btn-rekap" onclick="switchAdminTab('rekap')" class="px-6 py-3.5 font-bold text-xs sm:text-sm border-b-2 border-brand-navy text-brand-navy flex items-center space-x-2 whitespace-nowrap">
+                        <i class="fa-solid fa-table-list"></i>
+                        <span>Rekapitulasi Hasil Siswa</span>
+                    </button>
+                    <button id="tab-btn-soal" onclick="switchAdminTab('soal')" class="px-6 py-3.5 font-bold text-xs sm:text-sm text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center space-x-2 whitespace-nowrap">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <span>Bank & Kelola Soal (40)</span>
+                    </button>
+                    <button id="tab-btn-pengaturan" onclick="switchAdminTab('pengaturan')" class="px-6 py-3.5 font-bold text-xs sm:text-sm text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center space-x-2 whitespace-nowrap">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Pengaturan Asesmen</span>
+                    </button>
+                </div>
+
+                <div class="p-6">
+                    <!-- TAB 1: REKAPITULASI HASIL -->
+                    <div id="admin-tab-rekap" class="space-y-4">
+                        <div class="flex flex-wrap justify-between items-center gap-3">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <input type="text" id="filter-search" oninput="renderAdminRekapTable()" placeholder="Cari Nama / No Ujian..." class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs w-48 outline-none focus:ring-1 focus:ring-brand-navy">
+                                <select id="filter-kelas" onchange="renderAdminRekapTable()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs outline-none bg-white">
+                                    <option value="">Semua Kelas</option>
+                                    <option value="X-1">Kelas X-1</option>
+                                    <option value="X-2">Kelas X-2</option>
+                                    <option value="X-3">Kelas X-3</option>
+                                    <option value="X-4">Kelas X-4</option>
+                                </select>
+                                <select id="filter-sort" onchange="renderAdminRekapTable()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs outline-none bg-white">
+                                    <option value="nilai-desc">Nilai: Tinggi ke Rendah</option>
+                                    <option value="nilai-asc">Nilai: Rendah ke Tinggi</option>
+                                    <option value="nama-asc">Nama: A - Z</option>
+                                </select>
+                            </div>
+
+                            <div class="flex items-center space-x-2">
+                                <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs rounded-lg transition flex items-center">
+                                    <i class="fa-solid fa-file-csv mr-1.5"></i> Unduh CSV
+                                </button>
+                                <button onclick="printPDFReport()" class="px-3 py-1.5 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-xs rounded-lg transition flex items-center">
+                                    <i class="fa-solid fa-print mr-1.5"></i> Cetak PDF
+                                </button>
+                                <button onclick="clearAllDataConfirm()" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-semibold text-xs rounded-lg transition border border-rose-300">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Reset Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TABEL REKAPITULASI -->
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-xs text-left text-slate-700">
+                                <thead class="text-xs uppercase bg-slate-100 text-slate-700 border-b border-slate-200">
+                                    <tr>
+                                        <th class="px-4 py-3">No</th>
+                                        <th class="px-4 py-3">No Peserta</th>
+                                        <th class="px-4 py-3">Nama Siswa</th>
+                                        <th class="px-4 py-3">Kelas / Absen</th>
+                                        <th class="px-4 py-3 text-center">B / S / K</th>
+                                        <th class="px-4 py-3 text-center">Nilai</th>
+                                        <th class="px-4 py-3 text-center">Status</th>
+                                        <th class="px-4 py-3">Waktu Selesai</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-rekap-body">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: KELOLA SOAL -->
+                    <div id="admin-tab-soal" class="hidden space-y-4">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 class="font-bold text-slate-800 text-sm">Daftar Soal Asesmen (40 Item Teks LHO)</h3>
+                            <button onclick="openModalAddSoal()" class="px-3 py-1.5 bg-brand-gold hover:bg-brand-goldhover text-white text-xs font-bold rounded-lg transition flex items-center">
+                                <i class="fa-solid fa-plus mr-1"></i> Tambah Soal Baru
+                            </button>
+                        </div>
+
+                        <div id="admin-questions-list" class="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
+                            <!-- Dynamic Admin Question Cards -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: PENGATURAN ASESMEN -->
+                    <div id="admin-tab-pengaturan" class="hidden max-w-xl space-y-6">
+                        <form onsubmit="saveSettings(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Durasi Waktu Ujian (Menit)</label>
+                                <input type="number" id="setting-duration" min="10" max="180" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Batas Nilai Ketuntasan (KKTP / KKM)</label>
+                                <input type="number" id="setting-kkm" min="0" max="100" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Status Ujian</label>
+                                <select id="setting-status" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                                    <option value="OPEN">BUKA (Siswa Dapat Mengikuti Ujian)</option>
+                                    <option value="CLOSED">TUTUP (Akses Ujian Diberhentikan)</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="px-6 py-2.5 bg-brand-navy hover:bg-blue-900 text-white text-xs font-bold rounded-lg shadow">
+                                Simpan Pengaturan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER GLOBAL -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-8">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                © 2024/2025 <strong>SMAS Al-Hilaal Tehoru</strong> • All Rights Reserved.
+            </div>
+            <div>
+                Guru Pengampu: <span class="font-semibold text-slate-700">Rosdiana Waifitu, S.Pd.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PRINTABLE AREA UNTUK LAPORAN PDF -->
+    <div id="printable-area" class="hidden">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="font-bold text-xl uppercase">SMAS AL-HILAAL TEHORU</h1>
+            <h2 class="font-bold text-lg">REKAPITULASI HASIL ASESMEN SUMATIF AKHIR SEMESTER (SAS)</h2>
+            <p class="text-xs">Mata Pelajaran: Bahasa Indonesia (Kelas X Fase E) • Materi: Teks LHO</p>
+            <p class="text-xs">Guru Pengampu: Rosdiana Waifitu, S.Pd.</p>
+        </div>
+
+        <table class="w-full text-xs border-collapse border border-slate-400 mb-6">
+            <thead>
+                <tr class="bg-slate-200">
+                    <th class="border border-slate-400 p-2">No</th>
+                    <th class="border border-slate-400 p-2">No Peserta</th>
+                    <th class="border border-slate-400 p-2">Nama Siswa</th>
+                    <th class="border border-slate-400 p-2">Kelas</th>
+                    <th class="border border-slate-400 p-2">Benar</th>
+                    <th class="border border-slate-400 p-2">Salah</th>
+                    <th class="border border-slate-400 p-2">Nilai Akhir</th>
+                    <th class="border border-slate-400 p-2">Status</th>
+                </tr>
+            </thead>
+            <tbody id="print-table-body">
+                <!-- Dynamic Print Rows -->
+            </tbody>
+        </table>
+
+        <div class="flex justify-between text-xs mt-12 px-8">
+            <div>
+                <p>Mengetahui,</p>
+                <p class="font-bold mt-12">Kepala SMAS Al-Hilaal Tehoru</p>
+            </div>
+            <div>
+                <p>Tehoru, <span id="print-date"></span></p>
+                <p>Guru Mata Pelajaran,</p>
+                <p class="font-bold underline mt-12">Rosdiana Waifitu, S.Pd.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GRID NAVIGASI SOAL MOBILE -->
+    <div id="modal-nav-grid" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm">Navigasi Soal Ujian</h3>
+                <button onclick="toggleNavGridModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="mobile-grid-nav" class="grid grid-cols-5 gap-2 max-h-64 overflow-y-auto custom-scrollbar p-1">
+                <!-- Dynamic Buttons -->
+            </div>
+            <button onclick="toggleNavGridModal()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg">Tutup</button>
+        </div>
+    </div>
+
+    <!-- MODAL LOGIN ADMIN -->
+    <div id="modal-admin-login" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 shadow-2xl">
+            <div class="text-center border-b pb-3">
+                <div class="w-12 h-12 bg-amber-100 text-brand-gold rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg">Login Portal Guru / Admin</h3>
+                <p class="text-xs text-slate-500">Masukkan kredensial pengelola asesmen</p>
+            </div>
+
+            <form onsubmit="submitAdminLogin(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Username</label>
+                    <input type="text" id="admin-user" required placeholder="Default: admin" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-brand-navy">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
+                    <input type="password" id="admin-pass" required placeholder="Default: admin123" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-brand-navy">
+                </div>
+
+                <div class="pt-2 flex space-x-2">
+                    <button type="button" onclick="closeAdminModal()" class="w-1/2 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg">Batal</button>
+                    <button type="submit" class="w-1/2 py-2 bg-brand-navy hover:bg-blue-900 text-white text-xs font-bold rounded-lg">Masuk Portal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================================================
+           1. INITIAL BANK SOAL (40 SOAL TEKS LHO BAHASA INDONESIA KELAS X FASE E)
+           ========================================================================== */
+        const defaultQuestions = [
+            // A: Pengertian & Karakteristik LHO (1-6)
+            {
+                id: 1,
+                stimulus: "Teks Laporan Hasil Observasi adalah teks yang menyajikan informasi secara umum tentang sesuatu berdasarkan fakta dari hasil pengamatan secara langsung.",
+                text: "Berdasarkan kutipan di atas, ciri utama yang membedakan teks laporan hasil observasi dengan teks deskripsi adalah...",
+                options: [
+                    "A. Menggunakan bahasa kiasan dan imajinatif.",
+                    "B. Menyajikan informasi bersifat umum dan objektif berdasarkan fakta.",
+                    "C. Berisi opini atau pendapat pribadi penulis secara mendalam.",
+                    "D. Disusun berdasarkan jalan cerita atau alur naratif.",
+                    "E. Menceritakan pengalaman pribadi yang bersifat subjekstif."
+                ],
+                answer: 1,
+                explanation: "Teks LHO bersifat umum, faktual, dan objektif berdasarkan pengamatan langsung, berbeda dengan deskripsi yang lebih spesifik/subjektif."
+            },
+            {
+                id: 2,
+                stimulus: "Sifat teks laporan hasil observasi harus objektif. Artinya, informasi yang disampaikan harus sesuai dengan keadaan objek yang sebenarnya tanpa dipengaruhi pendapat pribadi.",
+                text: "Berikut ini yang merupakan contoh kalimat objektif untuk teks LHO adalah...",
+                options: [
+                    "A. Pohon pala Tehoru terlihat sangat indah dan menawan di sore hari.",
+                    "B. Menurut saya, buah cengkeh adalah komoditas terbaik di Maluku.",
+                    "C. Tinggi batang tanaman pala di perkebunan tersebut mencapai 8 meter.",
+                    "D. Baunya yang sangat wangi mungkin membuat semua orang menyukainya.",
+                    "E. Rasanya agak pahit tetapi tampaknya sangat disukai warga lokal."
+                ],
+                answer: 2,
+                explanation: "Kalimat 'Tinggi batang tanaman pala... mencapai 8 meter' menyajikan data terukur dan faktual tanpa opini."
+            },
+            {
+                id: 3,
+                stimulus: "Pengamatan terhadap ekosistem hutan mangrove di pesisir Tehoru menunjukkan keberadaan berbagai spesies burung laut dan biota muara.",
+                text: "Tujuan utama penulisan teks Laporan Hasil Observasi berdasarkan aktivitas tersebut adalah...",
+                options: [
+                    "A. Mengajak pembaca untuk menanam mangrove bersama.",
+                    "B. Memberikan informasi faktual mengenai kondisi ekosistem mangrove.",
+                    "C. Menghibur pembaca dengan keindahan pesisir pantai Tehoru.",
+                    "D. Memengaruhi pembaca agar membeli bibit mangrove.",
+                    "E. Menyampaikan kritik sosial terhadap kerusakan pantai."
+                ],
+                answer: 1,
+                explanation: "Tujuan utama LHO adalah memberikan informasi faktual hasil pengamatan secara objektif kepada pembaca."
+            },
+            {
+                id: 4,
+                stimulus: "Dalam teks LHO, objek pengamatan harus dijelaskan secara klasifikatif dan terstruktur dari hal yang bersifat umum ke hal yang khusus.",
+                text: "Objek berikut yang paling sesuai dikaji dalam teks Laporan Hasil Observasi adalah...",
+                options: [
+                    "A. Kehidupan masa kecil seorang tokoh pahlawan nasional.",
+                    "B. Pengalaman liburan pribadi ke Pantai Teluk Elpaputih.",
+                    "C. Morfologi dan habitat Burung Cenderawasih di hutan Papua.",
+                    "D. Dongeng asal-usul nama Negeri Tehoru.",
+                    "E. Prosedur atau tata cara membuat kue tradisional Maluku."
+                ],
+                answer: 2,
+                explanation: "Morfologi dan habitat Burung Cenderawasih merupakan objek fenomena alam yang dapat diamati secara objektif dan diklasifikasikan."
+            },
+            {
+                id: 5,
+                stimulus: "Teks LHO tidak memuat bagian penutup yang berisi pemihakan subjektif penulis, melainkan simpulan atas manfaat objek yang diamati.",
+                text: "Salah satu sifat penting teks laporan hasil observasi adalah 'sistematis'. Maksud dari sistematis adalah...",
+                options: [
+                    "A. Ditulis menggunakan bahasa sehari-hari yang santai.",
+                    "B. Disusun menurut urutan struktur yang teratur dan logis.",
+                    "C. Menggunakan gambar yang berwarna-warni.",
+                    "D. Memuat argumen pro dan kontra yang seimbang.",
+                    "E. Berisi opini tokoh-tokoh terkenal."
+                ],
+                answer: 1,
+                explanation: "Sistematis berarti teks disusun berdasarkan struktur pembangun yang berurutan dan logis."
+            },
+            {
+                id: 6,
+                stimulus: "Observasi dilakukan di Taman Nasional Manusela untuk mengidentifikasi keberagaman flora endemic Seram Selatan.",
+                text: "Hasil dari kegiatan observasi tersebut disajikan dalam bentuk...",
+                options: [
+                    "A. Teks Laporan Hasil Observasi",
+                    "B. Teks Eksplanasi Prosedur",
+                    "C. Teks Cerita Penjelajahan",
+                    "D. Teks Persuasi Lingkungan",
+                    "E. Teks Narasi Pengalaman"
+                ],
+                answer: 0,
+                explanation: "Laporan hasil pengamatan terhadap objek alam/flora disajikan dalam bentuk Teks Laporan Hasil Observasi."
+            },
+
+            // B: Struktur Teks LHO (7-13)
+            {
+                id: 7,
+                stimulus: "Cengkeh (Syzygium aromaticum) merupakan tanaman rempah asli Maluku yang tergolong dalam famili Myrtaceae. Tanaman ini memiliki daun berbentuk lonjong dan selalu hijau sepanjang tahun.",
+                text: "Dalam struktur teks Laporan Hasil Observasi, paragraf di atas termasuk bagian...",
+                options: [
+                    "A. Pernyataan umum / Definisi umum",
+                    "B. Deskripsi bagian",
+                    "C. Deskripsi manfaat",
+                    "D. Penutup / Rekomendasi",
+                    "E. Orientasi"
+                ],
+                answer: 0,
+                explanation: "Paragraf memuat definisi ilmiah, nama latin, dan pengenalan umum objek (Pernyataan/Definisi Umum)."
+            },
+            {
+                id: 8,
+                stimulus: "Batang pohon cengkeh berkayu keras dan bercabang banyak. Daunnya berwarna hijau tua kekuningan dengan panjang sekitar 7–12 cm. Bunga cengkeh tumbuh pada ujung cabang berupa gugusan.",
+                text: "Kutipan teks di atas merupakan bagian dari struktur LHO yaitu...",
+                options: [
+                    "A. Definisi umum",
+                    "B. Deskripsi bagian",
+                    "C. Deskripsi manfaat",
+                    "D. Kesimpulan penutup",
+                    "E. Tesis"
+                ],
+                answer: 1,
+                explanation: "Kutipan tersebut merinci fisik objek (batang, daun, bunga) yang merupakan rincian pada 'Deskripsi bagian'."
+            },
+            {
+                id: 9,
+                stimulus: "Minyak cengkeh dimanfaatkan secara luas dalam industri farmasi sebagai bahan antiseptik dan pereda sakit gigi. Selain itu, bunganya digunakan sebagai bumbu utama masakan.",
+                text: "Paragraf tersebut dalam teks LHO menduduki bagian...",
+                options: [
+                    "A. Pernyataan umum",
+                    "B. Deskripsi bagian",
+                    "C. Deskripsi manfaat",
+                    "D. Abstraksi",
+                    "E. Koda"
+                ],
+                answer: 2,
+                explanation: "Teks menjelaskan kegunaan atau fungsi dari objek yang dilaporkan (Deskripsi Manfaat)."
+            },
+            {
+                id: 10,
+                stimulus: "(1) Hutan mangrove di pesisir Tehoru memegang peranan penting. (2) Mangrove adalah ekosistem pantai yang didominasi oleh pepohonan bakau. (3) Akar bakau berfungsi menahan erosi gelombang laut. (4) Kayu bakau juga dapat dimanfaatkan sebagai bahan bakar.",
+                text: "Kalimat yang berfungsi sebagai 'Pernyataan / Definisi Umum' pada data di atas ditunjukkan oleh nomor...",
+                options: [
+                    "A. (1)",
+                    "B. (2)",
+                    "C. (3)",
+                    "D. (4)",
+                    "E. (1) dan (3)"
+                ],
+                answer: 1,
+                explanation: "Kalimat (2) berisi definisi ('Mangrove adalah ekosistem pantai...') yang mencirikan bagian Definisi Umum."
+            },
+            {
+                id: 11,
+                stimulus: "Urutan struktur teks Laporan Hasil Observasi yang tepat dan benar adalah...",
+                text: "Pilihlah susunan struktur yang benar di bawah ini:",
+                options: [
+                    "A. Deskripsi bagian -> Definisi umum -> Deskripsi manfaat",
+                    "B. Definisi umum -> Deskripsi bagian -> Deskripsi manfaat",
+                    "C. Orientasi -> Komplikasi -> Resolusi",
+                    "D. Tesis -> Argumentasi -> Penegasan ulang",
+                    "E. Pernyataan umum -> Komplikasi -> Koda"
+                ],
+                answer: 1,
+                explanation: "Struktur baku LHO adalah Pernyataan/Definisi Umum -> Deskripsi Bagian -> Deskripsi Manfaat."
+            },
+            {
+                id: 12,
+                stimulus: "Bagian deskripsi manfaat dalam teks LHO berisi tentang...",
+                text: "Pernyataan yang tepat mengenai deskripsi manfaat adalah...",
+                options: [
+                    "A. Pengenalan awal dan klasifikasi ilmiah objek.",
+                    "B. Rincian bentuk fisik dan sifat-sifat khusus objek.",
+                    "C. Kegunaan, fungsi, atau nilai guna objek bagi manusia dan lingkungan.",
+                    "D. Latar belakang Alasan dilakukannya pengamatan.",
+                    "E. Langkah-langkah pembuatan laporan."
+                ],
+                answer: 2,
+                explanation: "Deskripsi manfaat menjelaskan faedah atau fungsi objek hasil pengamatan."
+            },
+            {
+                id: 13,
+                stimulus: "Komodo (Varanus komodoensis) adalah spesies kadal terbesar di dunia yang hidup di Kepulauan Komodo. Komodo memiliki panjang rata-rata 2 hingga 3 meter.",
+                text: "Kalimat kedua pada kutipan di atas lebih tepat ditempatkan pada struktur...",
+                options: [
+                    "A. Definisi umum",
+                    "B. Deskripsi bagian",
+                    "C. Deskripsi manfaat",
+                    "D. Kesimpulan",
+                    "E. Rekomendasi"
+                ],
+                answer: 1,
+                explanation: "Ukuran tubuh (2 hingga 3 meter) merupakan rincian ciri fisik yang tergolong Deskripsi Bagian."
+            },
+
+            // C: Kaidah Kebahasaan (14-22)
+            {
+                id: 14,
+                stimulus: "Sagu (Metroxylon sagu) merupakan tanaman pangan pokok bagi masyarakat di Maluku dan Papua.",
+                text: "Kata yang dicetak tebal / bergaris bawah 'Sagu' dan 'tanaman' dalam kaidah kebahasaan LHO tergolong kelas kata...",
+                options: [
+                    "A. Verba (Kata kerja)",
+                    "B. Adjektiva (Kata sifat)",
+                    "C. Nomina (Kata benda)",
+                    "D. Adverbia (Kata keterangan)",
+                    "E. Konjungsi (Kata hubung)"
+                ],
+                answer: 2,
+                explanation: "Sagu dan tanaman menunjukkan nama benda/substansi (Nomina)."
+            },
+            {
+                id: 15,
+                stimulus: "Kalimat definisi ditandai dengan penggunaan verba relasional seperti *adalah, merupakan, ialah, yaitu*.",
+                text: "Kalimat di bawah ini yang merupakan kalimat definisi adalah...",
+                options: [
+                    "A. Daun pala berwarna hijau tua dan terasa licin saat dipegang.",
+                    "B. Pohon bakau tumbuh subur di sepanjang pantai Teluk Tehoru.",
+                    "C. Biota laut adalah seluruh makhluk hidup yang berkembang biak di laut.",
+                    "D. Nelayan menangkul ikan di laut saat malam hari.",
+                    "E. Tanaman tersebut dipanen setiap enam bulan sekali."
+                ],
+                answer: 2,
+                explanation: "Kalimat 'Biota laut adalah...' mengungkapkan pengertian dasar suatu objek dengan kopula 'adalah'."
+            },
+            {
+                id: 16,
+                stimulus: "Kalimat deskripsi menggambarkan sifat atau ciri-ciri fisik objek yang dapat ditangkap oleh pancaindra.",
+                text: "Manakah dari kalimat berikut yang tergolong kalimat deskripsi?",
+                options: [
+                    "A. Terumbu karang merupakan ekosistem bawah laut yang sangat kompleks.",
+                    "B. Burung Maleo memiliki bulu berwarna hitam dan dada berwarna merah muda.",
+                    "C. Observasi adalah kegiatan pengamatan terhadap suatu objek.",
+                    "D. Mamalia yaitu hewan menyusui yang melahirkan anak.",
+                    "E. Fotosintesis ialah proses pembuatan makanan pada tumbuhan."
+                ],
+                answer: 1,
+                explanation: "Kalimat menggambarkan rincian fisik bulu dan dada burung (kalimat deskripsi)."
+            },
+            {
+                id: 17,
+                stimulus: "Tanaman pala *menghasilkan* buah yang *mengandung* minyak atsiri berharga tinggi.",
+                text: "Kata *menghasilkan* dan *mengandung* dalam kalimat di atas tergolong verba...",
+                options: [
+                    "A. Verba material (tindakan/aktivitas fisik)",
+                    "B. Verba relasional (penghubung)",
+                    "C. Verba mental",
+                    "D. Verba pasif",
+                    "E. Verba imperatif"
+                ],
+                answer: 0,
+                explanation: "Verba material menunjukkan perbuatan fisik atau proses alami objek."
+            },
+            {
+                id: 18,
+                stimulus: "Dalam teks laporan ilmiah, sering digunakan istilah teknis atau kata keilmuan sesuai bidang observasi.",
+                text: "Manakah kelompok kata berikut yang semuanya merupakan istilah teknis dalam bidang biologi/lingkungan?",
+                options: [
+                    "A. Komputer, monitor, jaringan, keyboard",
+                    "B. Ekosistem, habitat, fotosintesis, endemis",
+                    "C. Otomotif, karburator, mesin, rem",
+                    "D. Ekonomi, inflasi, pasar, investasi",
+                    "E. Demokrasi, pemilu, politik, dewan"
+                ],
+                answer: 1,
+                explanation: "Ekosistem, habitat, fotosintesis, dan endemis adalah istilah keilmuan biologi/lingkungan."
+            },
+            {
+                id: 19,
+                stimulus: "Pohon bakau memiliki akar tunjang yang kuat *sehingga* mampu menahan hempasan gelombang laut.",
+                text: "Kata *sehingga* pada kalimat di atas berfungsi sebagai kata hubung (konjungsi)...",
+                options: [
+                    "A. Penambahan",
+                    "B. Pemilihan",
+                    "C. Sebab-akibat (kausalitas)",
+                    "D. Pertentangan",
+                    "E. Urutan waktu"
+                ],
+                answer: 2,
+                explanation: "Konjungsi 'sehingga' menandakan hubungan akibat dari akar tunjang yang kuat."
+            },
+            {
+                id: 20,
+                stimulus: "Ikan lele memiliki kumis di sekitar mulutnya yang berfungsi sebagai organ peraba.",
+                text: "Frasa nomina (kelompok kata benda) pada kalimat di atas adalah...",
+                options: [
+                    "A.Memiliki kumis",
+                    "B. Ikan lele",
+                    "C. Berfungsi sebagai",
+                    "D. Di sekitar",
+                    "E. Sangat cepat"
+                ],
+                answer: 1,
+                explanation: "Frasa 'Ikan lele' merujuk pada identitas nomina benda."
+            },
+            {
+                id: 21,
+                stimulus: "Penggunaan kalimat imperatif (perintah) *tidak* sesuai dengan kaidah kebahasaan teks LHO karena LHO bersifat infomatif.",
+                text: "Kalimat di bawah ini yang *TIDAK* patut ada dalam teks LHO adalah...",
+                options: [
+                    "A. Batang tanaman bambu beruas-ruas dan berongga.",
+                    "B. Harap matikan lampu setelah Anda membaca laporan ini!",
+                    "C. Hutan hujan tropis kaya akan keanekaragaman hayati.",
+                    "D. Buah kelapa memiliki sabut lunak dan tempurung keras.",
+                    "E. Burung nuri merah berkembang biak dengan cara bertelur."
+                ],
+                answer: 1,
+                explanation: "Kalimat B adalah kalimat perintah (imperatif) yang tidak lazim dalam laporan ilmiah faktual."
+            },
+            {
+                id: 22,
+                stimulus: "Akar pepohonan bakau *berfungsi* menyaring garam dari air laut.",
+                text: "Kata *berfungsi* dalam kaidah kebahasaan LHO dikategorikan sebagai...",
+                options: [
+                    "A. Verba relasional",
+                    "B. Adjektiva",
+                    "C. Nomina",
+                    "D. Konjungsi",
+                    "E. Interjeksi"
+                ],
+                answer: 0,
+                explanation: "Verba relasional menghubungkan subjek dengan pelengkap/penjelas fungsinya."
+            },
+
+            // D: Isi & Informasi Teks LHO (23-29)
+            {
+                id: 23,
+                stimulus: "Teluk Tehoru menyimpan kekayaan biota laut yang melimpah. Di perairan ini terdapat berbagai jenis terumbu karang, ikan hias, serta padang lamun yang masih terjaga keasliannya.",
+                text: "Gagasan utama dari kutipan teks di atas adalah...",
+                options: [
+                    "A. Jenis-jenis ikan hias di Indonesia.",
+                    "B. Kekayaan biota laut di Teluk Tehoru.",
+                    "C. Cara menjaga keaslian padang lamun.",
+                    "D. Kerusakan terumbu karang di Maluku.",
+                    "E. Aktivitas nelayan di perairan Tehoru."
+                ],
+                answer: 1,
+                explanation: "Gagasan utama terletak di awal paragraf: Kekayaan biota laut Teluk Tehoru."
+            },
+            {
+                id: 24,
+                stimulus: "(1) Luas kawasan hutan mangrove di Seram Selatan tercatat 1.200 hektar. (2) Keberadaan hutan ini sangat mengagumkan bagi siapapun yang melintas. (3) Terdapat 15 spesies bakau yang teridentifikasi. (4) Pemerintah daerah harus memperluas wilayah konservasi ini.",
+                text: "Pernyataan FAKTA dalam kutipan di atas ditunjukkan oleh nomor...",
+                options: [
+                    "A. (1) dan (3)",
+                    "B. (2) dan (4)",
+                    "C. (1) dan (2)",
+                    "D. (3) dan (4)",
+                    "E. Semua benar"
+                ],
+                answer: 0,
+                explanation: "Nomor (1) dan (3) berisi data kuantitatif teruji (1.200 hektar dan 15 spesies), sedangkan (2) dan (4) berupa impresi/opini."
+            },
+            {
+                id: 25,
+                stimulus: "Pernyataan OPINI adalah pendapat atau tanggapan subjektif yang belum tentu dapat dibuktikan secara pasti secara angka/data.",
+                text: "Manakah di antara kalimat berikut yang merupakan contoh OPINI?",
+                options: [
+                    "A. Pohon kelapa dapat tumbuh hingga ketinggian 30 meter.",
+                    "B. Buah pala asal Tehoru tampaknya merupakan yang paling harum di dunia.",
+                    "C. Suhu rata-rata di kawasan pantai adalah 28 derajat Celsius.",
+                    "D. Burung Maleo bertelur di dalam pasir panas.",
+                    "E. Daun sirih mengandung zat antiseptik alami."
+                ],
+                answer: 1,
+                explanation: "Kalimat B menggunakan kata penanda opini 'tampaknya' dan pembanding subjektif 'paling harum'."
+            },
+            {
+                id: 26,
+                stimulus: "Berdasarkan hasil pengamatan, tanaman sagu dapat dipanen setelah berumur 8 hingga 12 tahun, ditandai dengan munculnya pembungaan pada ujung batang.",
+                text: "Informasi yang sesuai dengan teks laporan di atas adalah...",
+                options: [
+                    "A. Sagu dipanen setiap dua bulan sekali.",
+                    "B. Tanda tanaman sagu siap panen adalah mengeringnya akar.",
+                    "C. Tanaman sagu siap dipanen pada rentang usia 8–12 tahun.",
+                    "D. Sagu hanya dapat tumbuh di daerah pegunungan tinggi.",
+                    "E. Pembungaan sagu terjadi sejak tanaman berumur 1 tahun."
+                ],
+                answer: 2,
+                explanation: "Informasi langsung tertera pada teks: sagu dipanen saat usia 8-12 tahun."
+            },
+            {
+                id: 27,
+                stimulus: "Sampah plastik di pesisir pantai terurai menjadi mikroplastik dalam waktu puluhan hingga ratusan tahun. Mikroplastik ini berbahaya jika tertelan oleh biota laut.",
+                text: "Simpulan yang paling tepat dari kutipan teks LHO tersebut adalah...",
+                options: [
+                    "A. Sampah plastik di pantai ramah bagi ekosistem laut.",
+                    "B. Pencemaran mikroplastik dari sampah berbahaya bagi kelangsungan biota laut.",
+                    "C. Biota laut menyukai mikroplastik sebagai bahan makanan.",
+                    "D. Sampah plastik akan hilang dengan sendirinya dalam waktu 1 hari.",
+                    "E. Pantai Tehoru bebas dari sampah plastik."
+                ],
+                answer: 1,
+                explanation: "Simpulan merangkum akibat mikroplastik dari sampah plastik bagi biota laut."
+            },
+            {
+                id: 28,
+                stimulus: "Observasi menunjukkan bahwa vegetasi pantai terdiri dari formasi pes-caprae dan formasi baringtonia yang menahan erosi pasir.",
+                text: "Kata *vegetasi* dalam kutipan informasi LHO di atas bermakna...",
+                options: [
+                    "A. Hewan liar yang hidup di pantai",
+                    "B. Keseluruhan komunitas tumbuhan di suatu daerah",
+                    "C. Batuan dan mineral pasir pantai",
+                    "D. Gelombang air laut yang pasang",
+                    "E. Pemukiman penduduk di pesisir"
+                ],
+                answer: 1,
+                explanation: "Vegetasi bermakna kehidupan tumbuh-tumbuhan atau komunitas tanaman."
+            },
+            {
+                id: 29,
+                stimulus: "Dari pengamatan 10 hektar lahan sagu, diperoleh rata-rata hasil tepung sagu sebanyak 20 ton per hektar setiap musim panen.",
+                text: "Penafsiran data yang tepat berdasarkan laporan observasi di atas adalah...",
+                options: [
+                    "A. Lahan sagu 10 hektar tersebut dapat menghasilkan total 200 ton tepung sagu.",
+                    "B. Lahan sagu tersebut mengalami kegagalan panen.",
+                    "C. Tepung sagu tidak memiliki nilai ekonomis.",
+                    "D. Setiap hektar hanya menghasilkan 2 ton sagu.",
+                    "E. Waktu panen sagu dilakukan setiap hari."
+                ],
+                answer: 0,
+                explanation: "10 hektar x 20 ton/hektar = total 200 ton tepung sagu."
+            },
+
+            // E: Analisis & Evaluasi (30-35)
+            {
+                id: 30,
+                stimulus: "Teks LHO A: 'Pohon pisang adalah tanaman yang sangat cantik dan lucu sekali kalau ditaruh di halaman.'\nTeks LHO B: 'Pohon pisang (Musa paradisiaca) tergolong dalam kelompok terna berkeping satu dengan tinggi 1-3 meter.'",
+                text: "Hasil analisis objektif terhadap kedua kutipan di atas menunjukkan bahwa...",
+                options: [
+                    "A. Teks A lebih memenuhi syarat baku LHO daripada Teks B.",
+                    "B. Teks B lebih memenuhi syarat ilmiah LHO karena objektif dan memuat nama latin.",
+                    "C. Kedua teks sama-sama merupakan teks deskripsi subjektif.",
+                    "D. Teks A menyajikan data empiris yang terukur.",
+                    "E. Teks B terlalu emosional dan berciri naratif."
+                ],
+                answer: 1,
+                explanation: "Teks B objektif, ilmiah (nama latin), dan terukur (1-3 meter), sesuai standar LHO."
+            },
+            {
+                id: 31,
+                stimulus: "Kalimat tidak efektif: *Berdasarkan hasil daripada pengamatan membuktikan bahwa tanaman cengkeh membutuhkan akan sinar matahari yang cukup.*",
+                text: "Perbaikan kalimat di atas agar menjadi kalimat efektif dan baku adalah...",
+                options: [
+                    "A. Hasil pengamatan membuktikan bahwa tanaman cengkeh membutuhkan sinar matahari yang cukup.",
+                    "B. Daripada hasil pengamatan membuktikan tanaman cengkeh butuh matahari.",
+                    "C. Hasil pengamatan dibuktikan oleh tanaman cengkeh yang sangat butuh matahari.",
+                    "D. Pengamatan terbukti bahwa cengkeh butuh sinar matahari cukup.",
+                    "E. Berdasarkan pengamatan tanaman cengkeh butuh sinar matahari."
+                ],
+                answer: 0,
+                explanation: "Menghilangkan pemborosan kata 'daripada' dan 'akan' membuat kalimat menjadi efektif dan baku."
+            },
+            {
+                id: 32,
+                stimulus: "Sebuah teks LHO hanya mencantumkan deskripsi bagian tanpa menyertakan definisi umum di awal paragraf.",
+                text: "Evaluasi terhadap struktur teks LHO tersebut adalah...",
+                options: [
+                    "A. Teks tersebut sudah sempurna dan tidak perlu diperbaiki.",
+                    "B. Teks tersebut tidak lengkap kerangka strukturnya karena kehilangan bagian Definisi Umum.",
+                    "C. Teks tersebut berubah menjadi teks prosedur.",
+                    "D. Teks tersebut tergolong sebagai puisi bebas.",
+                    "E. Teks tersebut menjadi lebih menarik dan komunikatif."
+                ],
+                answer: 1,
+                explanation: "Definisi umum wajib ada di awal struktur LHO sebagai fondasi pengenalan objek."
+            },
+            {
+                id: 33,
+                stimulus: "Penulis LHO memasukkan unsur perasaan sedih dan kagum secara berlebihan terhadap objek flora yang diamati.",
+                text: "Hal yang perlu diperbaiki dari teks LHO tersebut agar sesuai asas keilmuan adalah...",
+                options: [
+                    "A. Menambahkan lebih banyak kata kiasan.",
+                    "B. Menghapus ungkapan emosional subjektif dan menggantinya dengan data faktual.",
+                    "C. Mengubah judul laporan menjadi judul novel.",
+                    "D. Memperpanjang kalimat deskripsi.",
+                    "E. Menghapus seluruh nama latin tanaman."
+                ],
+                answer: 1,
+                explanation: "Teks LHO harus bebas dari unsur emosional subjektif penulis."
+            },
+            {
+                id: 34,
+                stimulus: "Perhatikan data acak berikut:\n(1) Buah pala berbentuk bulat berkulit kuning.\n(2) Pala (Myristica fragrans) merupakan tumbuhan biji berakar tunggang.\n(3) Biji pala dimanfaatkan sebagai rempah penyedap rasa.",
+                text: "Susunan paragraf LHO yang logis dan runtut berdasarkan data di atas adalah...",
+                options: [
+                    "A. (1) - (2) - (3)",
+                    "B. (2) - (1) - (3)",
+                    "C. (3) - (1) - (2)",
+                    "D. (3) - (2) - (1)",
+                    "E. (2) - (3) - (1)"
+                ],
+                answer: 1,
+                explanation: "Urutan logis LHO: Definisi Umum (2) -> Deskripsi Fisik/Bagian (1) -> Deskripsi Manfaat (3)."
+            },
+            {
+                id: 35,
+                stimulus: "Data observasi: Kecepatan angin di Pesisir Tehoru 15 knot, gelombang 1 meter, cuaca cerah berawan.",
+                text: "Paragraf laporan yang akurat berdasarkan data observasi tersebut adalah...",
+                options: [
+                    "A. Pesisir Tehoru dilanda badai topan dahsyat dengan gelombang tinggi.",
+                    "B. Hasil pengamatan menunjukkan cuaca di pesisir Tehoru cerah berawan dengan kecepatan angin 15 knot dan tinggi gelombang 1 meter.",
+                    "C. Nelayan Tehoru dilarang melaut karena laut sangat berbahaya.",
+                    "D. Cuaca Tehoru sangat dingin dan hujan lebat sepanjang hari.",
+                    "E. Angin di pantai sangat kencang hingga merusak rumah."
+                ],
+                answer: 1,
+                explanation: "Paragraf B secara akurat mentranskrip data tanpa distorsi fakta."
+            },
+
+            // F: Penyusunan Teks LHO (36-40)
+            {
+                id: 36,
+                stimulus: "Sebelum menyusun teks Laporan Hasil Observasi, langkah pertama yang wajib dilakukan oleh seorang pengamat adalah...",
+                text: "Langkah awal menyusun LHO yang benar adalah...",
+                options: [
+                    "A. Menulis bagian deskripsi manfaat terlebih dahulu.",
+                    "B. Menentukan objek yang akan diamati dan menyusun jadwal observasi.",
+                    "C. Mengedit kalimat agar terlihat bagus.",
+                    "D. Mempublikasikan hasil laporan ke media cetak.",
+                    "E. Meminta pendapat orang lain mengenai opini kita."
+                ],
+                answer: 1,
+                explanation: "Langkah pertama adalah menentukan objek pengamatan serta merencanakan observasi."
+            },
+            {
+                id: 37,
+                stimulus: "Dalam observasi mengenai 'Pengolahan Minyak Pala di Tehoru', aspek yang *TIDAK* relevan untuk diamati adalah...",
+                text: "Aspek pengamatan yang kurang relevan adalah...",
+                options: [
+                    "A. Peralatan penyulingan minyak pala.",
+                    "B. Rendemen minyak yang dihasilkan dari biji pala.",
+                    "C. Sejarah kehidupan pribadi pemilik pabrik penyulingan.",
+                    "D. Waktu dan suhu yang dibutuhkan saat penyulingan.",
+                    "E. Ciri fisik biji pala yang siap disuling."
+                ],
+                answer: 2,
+                explanation: "Sejarah kehidupan pribadi pemilik tidak relevan dengan laporan objek teknis penyulingan minyak pala."
+            },
+            {
+                id: 38,
+                stimulus: "Rancangan kerangka LHO:\n1. Definisi Burung Nuri Maluku\n2. Ciri bulu dan paruh Nuri Maluku\n3. ......",
+                text: "Topik yang tepat untuk mengisi bagian ke-3 kerangka laporan di atas adalah...",
+                options: [
+                    "A. Habitat dan manfaat keberadaan Burung Nuri Maluku di alam.",
+                    "B. Cerita fabel kisah Burung Nuri dan Kancil.",
+                    "C. Harga jual Burung Nuri di pasar gelap.",
+                    "D. Alasan penulis menyukai warna merah.",
+                    "E. Puisi tentang keindahan Burung Nuri."
+                ],
+                answer: 0,
+                explanation: "Melengkapi struktur LHO: Definisi -> Deskripsi Bagian -> Habitat/Manfaat."
+            },
+            {
+                id: 39,
+                stimulus: "Dalam menyusun LHO, penggunaan kata-kata vulgar, kiasan bermakna ganda, dan istilah slang harus dihindari.",
+                text: "Bahasa yang wajib digunakan dalam pembuatan teks LHO adalah...",
+                options: [
+                    "A. Bahasa gaul kekinian",
+                    "B. Bahasa baku, lugas, dan objektif",
+                    "C. Bahasa puitis bermakna konotatif",
+                    "D. Bahasa kiasan dan majas",
+                    "E. Bahasa daerah setempat tanpa terjemahan"
+                ],
+                answer: 1,
+                explanation: "LHO adalah karya ilmiah yang mewajibkan bahasa ragam baku, formal, lugas, dan bernilai objektif."
+            },
+            {
+                id: 40,
+                stimulus: "Tahap akhir penyusunan teks LHO sebelum dipublikasikan adalah 'menyunting'.",
+                text: "Tujuan utama dari kegiatan menyunting teks LHO adalah...",
+                options: [
+                    "A. Mengubah seluruh isi laporan menjadi cerita rekaan.",
+                    "B. Mengoreksi kesalahan ejaan, tanda baca, pilihan kata, dan kebenaran struktur teks.",
+                    "C. Menambah opini pribadi sebanyak-banyaknya.",
+                    "D. Memperbanyak jumlah halaman agar tebal.",
+                    "E. Menghapus data-data angka hasil pengukuran."
+                ],
+                answer: 1,
+                explanation: "Menyunting bertujuan memperbaki ejaan (PUEBI/EYD), tata bahasa, serta kerapian struktur teks."
+            }
+        ];
+
+        /* ==========================================================================
+           2. GLOBAL STATE & APP STORAGE
+           ========================================================================== */
+        let currentQuestions = [];
+        let examSettings = {
+            durationMinutes: 90,
+            kkm: 75,
+            status: 'OPEN'
+        };
+
+        // User Current Session State
+        let currentStudent = {
+            nama: '',
+            kelas: '',
+            absen: '',
+            nopes: ''
+        };
+
+        let userAnswers = {}; // { qId: 'A'|'B'|'C'|'D'|'E' }
+        let userRagu = {};    // { qId: true|false }
+        let currentQuestionIndex = 0;
+        let timerInterval = null;
+        let remainingSeconds = 90 * 60;
+        let isAdminLoggedIn = false;
+
+        /* ==========================================================================
+           3. INITIALIZATION & STORAGE LOADERS
+           ========================================================================== */
+        window.onload = function() {
+            loadLocalSettings();
+            loadLocalQuestions();
+            updateHomeDisplayInfo();
+            renderQuestionNavGrid();
+        };
+
+        function loadLocalSettings() {
+            const saved = localStorage.getItem('sas_settings');
+            if(saved) {
+                try { examSettings = JSON.parse(saved); } catch(e){}
+            }
+        }
+
+        function saveLocalSettings() {
+            localStorage.setItem('sas_settings', JSON.stringify(examSettings));
+            updateHomeDisplayInfo();
+        }
+
+        function loadLocalQuestions() {
+            const saved = localStorage.getItem('sas_questions');
+            if(saved) {
+                try { currentQuestions = JSON.parse(saved); } catch(e){ currentQuestions = defaultQuestions; }
+            } else {
+                currentQuestions = defaultQuestions;
+                localStorage.setItem('sas_questions', JSON.stringify(defaultQuestions));
+            }
+        }
+
+        function saveLocalQuestions() {
+            localStorage.setItem('sas_questions', JSON.stringify(currentQuestions));
+        }
+
+        function getRekapData() {
+            const saved = localStorage.getItem('sas_rekap_results');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveRekapResult(resultObj) {
+            let list = getRekapData();
+            // Cek jika nopes sudah ada, update atau add
+            const idx = list.findIndex(item => item.nopes === resultObj.nopes);
+            if(idx >= 0) {
+                list[idx] = resultObj;
+            } else {
+                list.push(resultObj);
+            }
+            localStorage.setItem('sas_rekap_results', JSON.stringify(list));
+        }
+
+        function updateHomeDisplayInfo() {
+            document.getElementById('display-home-duration').innerText = examSettings.durationMinutes;
+            document.getElementById('display-home-kkm').innerText = examSettings.kkm;
+            document.getElementById('instruction-duration').innerText = examSettings.durationMinutes;
+            document.getElementById('setting-duration').value = examSettings.durationMinutes;
+            document.getElementById('setting-kkm').value = examSettings.kkm;
+            document.getElementById('setting-status').value = examSettings.status;
+        }
+
+        /* ==========================================================================
+           4. NAVIGATION CONTROL
+           ========================================================================== */
+        function navigateTo(pageId) {
+            const pages = ['page-home', 'page-identity', 'page-instructions', 'page-exam', 'page-result', 'page-admin'];
+            pages.forEach(p => {
+                const el = document.getElementById(p);
+                if(el) el.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ==========================================================================
+           5. STUDENT IDENTITY & INSTRUCTIONS
+           ========================================================================== */
+        function submitIdentity(e) {
+            e.preventDefault();
+            if(examSettings.status === 'CLOSED') {
+                alert('Mohon maaf, Ujian Asesmen SAS saat ini sedang DITUTUP oleh guru.');
+                return;
+            }
+
+            currentStudent.nama = document.getElementById('input-nama').value.trim();
+            currentStudent.kelas = document.getElementById('input-kelas').value;
+            currentStudent.absen = document.getElementById('input-absen').value;
+            currentStudent.nopes = document.getElementById('input-nopes').value.trim();
+
+            document.getElementById('summary-nama').innerText = currentStudent.nama;
+            document.getElementById('summary-kelas').innerText = currentStudent.kelas;
+            document.getElementById('summary-absen').innerText = currentStudent.absen;
+            document.getElementById('summary-nopes').innerText = currentStudent.nopes;
+
+            navigateTo('page-instructions');
+        }
+
+        /* ==========================================================================
+           6. EXAM ENGINE (CBT CORE)
+           ========================================================================== */
+        function startExam() {
+            userAnswers = {};
+            userRagu = {};
+            currentQuestionIndex = 0;
+            remainingSeconds = examSettings.durationMinutes * 60;
+
+            renderQuestionNavGrid();
+            loadQuestionIndex(0);
+            startTimer();
+
+            navigateTo('page-exam');
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                remainingSeconds--;
+                updateTimerDisplay();
+
+                if(remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Waktu ujian telah habis! Sistem akan mengumpulkan jawaban Anda secara otomatis.');
+                    processExamSubmission();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const hrs = Math.floor(remainingSeconds / 3600);
+            const mins = Math.floor((remainingSeconds % 3600) / 60);
+            const secs = remainingSeconds % 60;
+
+            const format = (n) => n < 10 ? '0' + n : n;
+            document.getElementById('exam-timer').innerText = `${format(hrs)}:${format(mins)}:${format(secs)}`;
+        }
+
+        function renderQuestionNavGrid() {
+            const desktopGrid = document.getElementById('desktop-grid-nav');
+            const mobileGrid = document.getElementById('mobile-grid-nav');
+
+            let html = '';
+            currentQuestions.forEach((q, idx) => {
+                const qId = q.id;
+                const isAnswered = userAnswers[qId] !== undefined;
+                const isRagu = userRagu[qId] === true;
+                const isCurrent = currentQuestionIndex === idx;
+
+                let bgClass = 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300';
+                if(isRagu) {
+                    bgClass = 'bg-amber-400 text-amber-950 font-bold border-amber-500 shadow-sm';
+                } else if(isAnswered) {
+                    bgClass = 'bg-emerald-600 text-white font-bold border-emerald-700 shadow-sm';
+                }
+
+                if(isCurrent) {
+                    bgClass += ' ring-2 ring-brand-navy ring-offset-1';
+                }
+
+                html += `
+                    <button onclick="jumpToQuestion(${idx})" class="h-9 rounded-lg border text-xs flex items-center justify-center transition-all ${bgClass}">
+                        ${idx + 1}
+                    </button>
+                `;
+            });
+
+            desktopGrid.innerHTML = html;
+            mobileGrid.innerHTML = html;
+
+            // Update Count
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('answered-count').innerText = answeredCount;
+        }
+
+        function loadQuestionIndex(index) {
+            if(index < 0 || index >= currentQuestions.length) return;
+            currentQuestionIndex = index;
+
+            const q = currentQuestions[index];
+            document.getElementById('current-question-num').innerText = index + 1;
+
+            // Stimulus
+            const stimEl = document.getElementById('question-stimulus');
+            if(q.stimulus && q.stimulus.trim() !== '') {
+                stimEl.innerText = q.stimulus;
+                stimEl.classList.remove('hidden');
+            } else {
+                stimEl.classList.add('hidden');
+            }
+
+            // Question text
+            document.getElementById('question-text').innerText = q.text;
+
+            // Options
+            const optsContainer = document.getElementById('options-container');
+            const selectedOpt = userAnswers[q.id];
+
+            let optsHtml = '';
+            q.options.forEach((optText, optIdx) => {
+                const isChecked = selectedOpt === optIdx;
+                const activeStyle = isChecked ? 'border-brand-navy bg-blue-50/80 text-brand-navy ring-1 ring-brand-navy font-semibold' : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700';
+
+                optsHtml += `
+                    <button onclick="selectOption(${q.id}, ${optIdx})" class="w-full text-left p-3.5 rounded-xl border transition-all duration-150 flex items-start space-x-3 ${activeStyle}">
+                        <div class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 ${isChecked ? 'bg-brand-navy text-white border-brand-navy' : 'bg-slate-100 text-slate-600'}">
+                            ${String.fromCharCode(65 + optIdx)}
+                        </div>
+                        <div class="text-xs md:text-sm leading-relaxed">${optText.replace(/^[A-E]\.\s*/, '')}</div>
+                    </button>
+                `;
+            });
+            optsContainer.innerHTML = optsHtml;
+
+            // Badge Ragu & Ragu Button
+            const isRagu = userRagu[q.id] === true;
+            const badgeRagu = document.getElementById('badge-ragu-status');
+            const btnRagu = document.getElementById('btn-ragu');
+
+            if(isRagu) {
+                badgeRagu.classList.remove('hidden');
+                btnRagu.classList.add('bg-amber-500', 'text-white');
+                btnRagu.classList.remove('bg-amber-100', 'text-amber-800');
+            } else {
+                badgeRagu.classList.add('hidden');
+                btnRagu.classList.remove('bg-amber-500', 'text-white');
+                btnRagu.classList.add('bg-amber-100', 'text-amber-800');
+            }
+
+            // Button Visibility
+            document.getElementById('btn-prev').disabled = (index === 0);
+            if(index === 0) {
+                document.getElementById('btn-prev').classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                document.getElementById('btn-prev').classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+
+            if(index === currentQuestions.length - 1) {
+                document.getElementById('btn-next').classList.add('hidden');
+                document.getElementById('btn-finish').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-next').classList.remove('hidden');
+                document.getElementById('btn-finish').classList.add('hidden');
+            }
+
+            renderQuestionNavGrid();
+        }
+
+        function selectOption(qId, optIdx) {
+            userAnswers[qId] = optIdx;
+            loadQuestionIndex(currentQuestionIndex);
+        }
+
+        function toggleRaguCurrent() {
+            const qId = currentQuestions[currentQuestionIndex].id;
+            userRagu[qId] = !userRagu[qId];
+            loadQuestionIndex(currentQuestionIndex);
+        }
+
+        function prevQuestion() {
+            if(currentQuestionIndex > 0) loadQuestionIndex(currentQuestionIndex - 1);
+        }
+
+        function nextQuestion() {
+            if(currentQuestionIndex < currentQuestions.length - 1) loadQuestionIndex(currentQuestionIndex + 1);
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestionIndex(index);
+            const modal = document.getElementById('modal-nav-grid');
+            if(!modal.classList.contains('hidden')) toggleNavGridModal();
+        }
+
+        function toggleNavGridModal() {
+            document.getElementById('modal-nav-grid').classList.toggle('hidden');
+        }
+
+        function confirmSubmitExam() {
+            const total = currentQuestions.length;
+            const answered = Object.keys(userAnswers).length;
+            const unanswered = total - answered;
+            
+            let raguCount = 0;
+            Object.values(userRagu).forEach(v => { if(v) raguCount++; });
+
+            let msg = `Apakah Anda yakin ingin mengumpulkan jawaban?\n\n- Total Soal: ${total}\n- Terjawab: ${answered}\n- Belum Dijawab: ${unanswered}\n- Soal Ragu: ${raguCount}`;
+
+            if(unanswered > 0 || raguCount > 0) {
+                msg += `\n\nCatatan: Masih ada soal yang belum dijawab/ragu!`;
+            }
+
+            if(confirm(msg)) {
+                processExamSubmission();
+            }
+        }
+
+        /* ==========================================================================
+           7. SUBMISSION & RESULT GENERATION
+           ========================================================================== */
+        function processExamSubmission() {
+            clearInterval(timerInterval);
+
+            let benar = 0;
+            let salah = 0;
+            let kosong = 0;
+
+            currentQuestions.forEach(q => {
+                const userAns = userAnswers[q.id];
+                if(userAns === undefined) {
+                    kosong++;
+                } else if(userAns === q.answer) {
+                    benar++;
+                } else {
+                    salah++;
+                }
+            });
+
+            const total = currentQuestions.length;
+            const nilaiAkhir = Math.round((benar / total) * 100);
+            const isTuntas = nilaiAkhir >= examSettings.kkm;
+
+            // Render Result UI
+            document.getElementById('result-nama').innerText = currentStudent.nama;
+            document.getElementById('result-kelas').innerText = currentStudent.kelas;
+            document.getElementById('result-nopes').innerText = currentStudent.nopes;
+
+            const now = new Date();
+            const timeStr = `${now.toLocaleDateString('id-ID')} ${now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}`;
+            document.getElementById('result-time').innerText = timeStr;
+
+            document.getElementById('result-score').innerText = nilaiAkhir;
+            document.getElementById('result-benar').innerText = benar;
+            document.getElementById('result-salah').innerText = salah;
+            document.getElementById('result-kosong').innerText = kosong;
+
+            const badge = document.getElementById('result-status-badge');
+            if(isTuntas) {
+                badge.innerText = `LULUS / TUNTAS (KKTP >= ${examSettings.kkm})`;
+                badge.className = 'inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300';
+            } else {
+                badge.innerText = `BELUM TUNTAS (KKTP < ${examSettings.kkm})`;
+                badge.className = 'inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-300';
+            }
+
+            // Save Result to Local DB for Teacher Rekap
+            saveRekapResult({
+                nopes: currentStudent.nopes,
+                nama: currentStudent.nama,
+                kelas: currentStudent.kelas,
+                absen: currentStudent.absen,
+                benar: benar,
+                salah: salah,
+                kosong: kosong,
+                nilai: nilaiAkhir,
+                status: isTuntas ? 'TUNTAS' : 'BELUM TUNTAS',
+                waktu: timeStr
+            });
+
+            navigateTo('page-result');
+        }
+
+        function finishExamToHome() {
+            navigateTo('page-home');
+        }
+
+        /* ==========================================================================
+           8. ADMIN & TEACHER DASHBOARD LOGIC
+           ========================================================================== */
+        function openAdminModal() {
+            if(isAdminLoggedIn) {
+                renderAdminDashboard();
+                navigateTo('page-admin');
+            } else {
+                document.getElementById('modal-admin-login').classList.remove('hidden');
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('modal-admin-login').classList.add('hidden');
+        }
+
+        function submitAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value.trim();
+            const p = document.getElementById('admin-pass').value.trim();
+
+            if(u === 'admin' && p === 'admin123') {
+                isAdminLoggedIn = true;
+                closeAdminModal();
+                document.getElementById('admin-btn-text').innerText = 'Dashboard Guru';
+                renderAdminDashboard();
+                navigateTo('page-admin');
+            } else {
+                alert('Username atau Password Guru/Admin salah!');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            document.getElementById('admin-btn-text').innerText = 'Portal Guru';
+            navigateTo('page-home');
+        }
+
+        function renderAdminDashboard() {
+            renderAdminStats();
+            renderAdminRekapTable();
+            renderAdminQuestionsList();
+        }
+
+        function renderAdminStats() {
+            const data = getRekapData();
+            document.getElementById('stat-total-peserta').innerText = data.length;
+
+            if(data.length === 0) {
+                document.getElementById('stat-rata-nilai').innerText = '0.0';
+                document.getElementById('stat-nilai-max').innerText = '0';
+                document.getElementById('stat-nilai-min').innerText = '0';
+                return;
+            }
+
+            let sum = 0;
+            let max = -1;
+            let min = 101;
+
+            data.forEach(item => {
+                sum += item.nilai;
+                if(item.nilai > max) max = item.nilai;
+                if(item.nilai < min) min = item.nilai;
+            });
+
+            document.getElementById('stat-rata-nilai').innerText = (sum / data.length).toFixed(1);
+            document.getElementById('stat-nilai-max').innerText = max;
+            document.getElementById('stat-nilai-min').innerText = min;
+        }
+
+        function renderAdminRekapTable() {
+            let data = getRekapData();
+            const search = document.getElementById('filter-search').value.toLowerCase();
+            const kelas = document.getElementById('filter-kelas').value;
+            const sort = document.getElementById('filter-sort').value;
+
+            // Filter
+            data = data.filter(item => {
+                const matchSearch = item.nama.toLowerCase().includes(search) || item.nopes.toLowerCase().includes(search);
+                const matchKelas = kelas === '' || item.kelas === kelas;
+                return matchSearch && matchKelas;
+            });
+
+            // Sort
+            if(sort === 'nilai-desc') {
+                data.sort((a,b) => b.nilai - a.nilai);
+            } else if(sort === 'nilai-asc') {
+                data.sort((a,b) => a.nilai - b.nilai);
+            } else if(sort === 'nama-asc') {
+                data.sort((a,b) => a.nama.localeCompare(b.nama));
+            }
+
+            const tbody = document.getElementById('table-rekap-body');
+            const printBody = document.getElementById('print-table-body');
+
+            if(data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400">Belum ada data hasil tes siswa.</td></tr>`;
+                printBody.innerHTML = `<tr><td colspan="8" class="text-center py-4">Belum ada data.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            let printHtml = '';
+
+            data.forEach((item, idx) => {
+                const statusBadge = item.status === 'TUNTAS' 
+                    ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">TUNTAS</span>`
+                    : `<span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-bold">BELUM</span>`;
+
+                html += `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="px-4 py-3 font-semibold">${idx + 1}</td>
+                        <td class="px-4 py-3 font-mono font-medium">${item.nopes}</td>
+                        <td class="px-4 py-3 font-bold text-slate-900">${item.nama}</td>
+                        <td class="px-4 py-3">${item.kelas} (${item.absen})</td>
+                        <td class="px-4 py-3 text-center">${item.benar} / ${item.salah} / ${item.kosong}</td>
+                        <td class="px-4 py-3 text-center font-extrabold text-brand-navy text-sm">${item.nilai}</td>
+                        <td class="px-4 py-3 text-center">${statusBadge}</td>
+                        <td class="px-4 py-3 text-slate-500">${item.waktu}</td>
+                    </tr>
+                `;
+
+                printHtml += `
+                    <tr>
+                        <td class="border border-slate-400 p-2 text-center">${idx + 1}</td>
+                        <td class="border border-slate-400 p-2">${item.nopes}</td>
+                        <td class="border border-slate-400 p-2 font-bold">${item.nama}</td>
+                        <td class="border border-slate-400 p-2 text-center">${item.kelas}</td>
+                        <td class="border border-slate-400 p-2 text-center">${item.benar}</td>
+                        <td class="border border-slate-400 p-2 text-center">${item.salah}</td>
+                        <td class="border border-slate-400 p-2 text-center font-bold">${item.nilai}</td>
+                        <td class="border border-slate-400 p-2 text-center">${item.status}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+            printBody.innerHTML = printHtml;
+        }
+
+        function switchAdminTab(tab) {
+            ['rekap', 'soal', 'pengaturan'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = 'px-6 py-3.5 font-bold text-xs sm:text-sm text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center space-x-2 whitespace-nowrap';
+            });
+
+            document.getElementById(`admin-tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = 'px-6 py-3.5 font-bold text-xs sm:text-sm border-b-2 border-brand-navy text-brand-navy flex items-center space-x-2 whitespace-nowrap';
+        }
+
+        function renderAdminQuestionsList() {
+            const container = document.getElementById('admin-questions-list');
+            let html = '';
+
+            currentQuestions.forEach((q, idx) => {
+                html += `
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-brand-navy text-white text-xs font-bold px-2.5 py-1 rounded">Soal #${idx + 1}</span>
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Kunci: ${String.fromCharCode(65 + q.answer)}</span>
+                        </div>
+                        ${q.stimulus ? `<div class="text-xs italic text-slate-600 bg-white p-2.5 rounded border border-slate-200 font-serif">"${q.stimulus}"</div>` : ''}
+                        <p class="text-xs font-semibold text-slate-800">${q.text}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs text-slate-600 pl-2">
+                            ${q.options.map((opt, oIdx) => `
+                                <div class="${oIdx === q.answer ? 'font-bold text-emerald-800' : ''}">${opt}</div>
+                            `).join('')}
+                        </div>
+                        <div class="text-[11px] text-amber-800 bg-amber-50 p-2 rounded border border-amber-200 mt-1">
+                            <strong>Pembahasan:</strong> ${q.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function saveSettings(e) {
+            e.preventDefault();
+            examSettings.durationMinutes = parseInt(document.getElementById('setting-duration').value);
+            examSettings.kkm = parseInt(document.getElementById('setting-kkm').value);
+            examSettings.status = document.getElementById('setting-status').value;
+
+            saveLocalSettings();
+            alert('Pengaturan Asesmen berhasil diperbarui!');
+        }
+
+        function exportToCSV() {
+            const data = getRekapData();
+            if(data.length === 0) {
+                alert('Tidak ada data rekapitulasi untuk diunduh.');
+                return;
+            }
+
+            let csv = 'No,No Peserta,Nama Siswa,Kelas,Absen,Benar,Salah,Kosong,Nilai,Status,Waktu Selesai\n';
+            data.forEach((item, idx) => {
+                csv += `"${idx+1}","${item.nopes}","${item.nama}","${item.kelas}","${item.absen}","${item.benar}","${item.salah}","${item.kosong}","${item.nilai}","${item.status}","${item.waktu}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `Rekap_SAS_BahasaIndonesia_X_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function printPDFReport() {
+            const data = getRekapData();
+            if(data.length === 0) {
+                alert('Tidak ada data rekapitulasi untuk dicetak.');
+                return;
+            }
+            document.getElementById('print-date').innerText = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
+            window.print();
+        }
+
+        function clearAllDataConfirm() {
+            if(confirm('Apakah Anda yakin ingin MENGHAPUS SELURUH REKAP HASIL UJIAN SISWA? Data yang dihapus tidak dapat dikembalikan.')) {
+                localStorage.removeItem('sas_rekap_results');
+                renderAdminDashboard();
+                alert('Seluruh data rekap hasil ujian telah di-reset.');
+            }
+        }
+
+        function openModalAddSoal() {
+            alert('Fitur Tambah Soal Interaktif dapat dikembangkan lebih lanjut. Saat ini 40 Soal Standar Kurikulum Merdeka Teks LHO sudah dimuat sepenuhnya di Bank Soal.');
+        }
+    </script>
+</body>
+</html>
